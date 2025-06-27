@@ -1,0 +1,21 @@
+import numpy as np # 수학 계산 라이브러리
+import matplotlib.pyplot as plt # 시각화 인터페이스
+import pandas as pd # 표 데이터 쉽게 다루도록 함
+from sklearn.model_selection import train_test_split
+from sklearn import linear_model
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+
+# 자동차 연비, CO2 배출량 데이터 csv 링크
+url= "https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-ML0101EN-SkillsNetwork/labs/Module%202/data/FuelConsumptionCo2.csv"
+df=pd.read_csv(url) # df : 데이터프레임, pandas로 csv 읽어옴
+
+# 컬럼명 상수 4개 한 줄로 정의
+COL_ENGINE_SIZE, COL_CYLINDERS, COL_FUEL_CONS, COL_CO2 = 'ENGINESIZE', 'CYLINDERS', 'FUELCONSUMPTION_COMB', 'CO2EMISSIONS'
+
+cdf = df[[COL_ENGINE_SIZE, COL_CYLINDERS, COL_FUEL_CONS, COL_CO2]] # df에서 원하는 column만 뽑아옴
+
+#2. Select the fuel consumption feature from the dataframe and split the data 80%/20% into training and testing sets.
+X = cdf[COL_FUEL_CONS].to_numpy() # NumPy 배열로 변환
+y = cdf[COL_CO2].to_numpy() # NumPy 배열로 변환
+
+X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2,random_state=42)
