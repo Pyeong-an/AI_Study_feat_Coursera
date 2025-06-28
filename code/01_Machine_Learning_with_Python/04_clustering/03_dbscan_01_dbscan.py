@@ -21,7 +21,7 @@ warnings.filterwarnings('ignore')
 zip_file_url = 'https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/YcUk-ytgrPkmvZAh5bf7zA/Canada.zip'
 
 # Directory to save the extracted TIFF file
-output_dir = './'
+output_dir = '/'
 os.makedirs(output_dir, exist_ok=True)
 
 # Step 1: Download the ZIP file
