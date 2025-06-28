@@ -20,7 +20,7 @@ X_std = std_scaler.fit_transform(X) # 각 열에 대해 평균, 표준편차 계
 X_train, X_test, y_train, y_test = train_test_split(X_std,y,test_size=0.2,random_state=42)
 
 # X의 1이 FUELCONSUMPTION_COMB_MPG, y가 CO2 emissions임
-X_train_2 = X_train[:,1] # 엔진 사이즈만 가져옴
+X_train_2 = X_train[:,1] # FUELCONSUMPTION_COMB_MPG만 가져옴
 regressor_2 = linear_model.LinearRegression()
 regressor_2.fit(X_train_2.reshape(-1, 1), y_train)
 coef_2 =  regressor_2.coef_

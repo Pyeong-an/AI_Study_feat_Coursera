@@ -28,5 +28,5 @@ regressor_1 = linear_model.LinearRegression()
 regressor_1.fit(X_train_1.reshape(-1, 1), y_train)
 coef_1 =  regressor_1.coef_
 intercept_1 = regressor_1.intercept_
-print(coef_1)
-print(intercept_1)
+print('Coefficients: ',coef_1)
+print('Intercept: ',intercept_1)

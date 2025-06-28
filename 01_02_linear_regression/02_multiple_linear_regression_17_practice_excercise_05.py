@@ -22,7 +22,7 @@ X_train, X_test, y_train, y_test = train_test_split(X_std,y,test_size=0.2,random
 # Exercise 4
 # Repeat the same modeling but use FUELCONSUMPTION_COMB_MPG as the independent variable instead. Display the model coefficients including the intercept.
 # X의 1이 FUELCONSUMPTION_COMB_MPG, y가 CO2 emissions임
-X_train_2 = X_train[:,1] # 엔진 사이즈만 가져옴
+X_train_2 = X_train[:,1] # FUELCONSUMPTION_COMB_MPG만 가져옴
 regressor_2 = linear_model.LinearRegression()
 regressor_2.fit(X_train_2.reshape(-1, 1), y_train)
 coef_2 =  regressor_2.coef_
