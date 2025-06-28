@@ -1,0 +1,87 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+from sklearn.datasets import make_blobs
+from sklearn.datasets import make_classification
+from sklearn.metrics import silhouette_score, silhouette_samples, davies_bouldin_score
+from scipy.spatial import Voronoi, voronoi_plot_2d
+from matplotlib.patches import Patch
+from matplotlib import cm
+
+
+def evaluate_clustering(X, labels, n_clusters, ax=None, title_suffix=''):
+    """
+    X : 데이터
+    labels : 각 점이 속한 클러스터 번호
+    n_clusters : 클러스터 개수
+    ax : 그림 그릴 축(없으면 새로 만듬)
+    title_suffix : 제목 뒤에 붙일 글자
+    """
+    if ax is None:
+        ax = plt.gca()  # axis가 안 들어오면 새로 정의
+
+    # 실루엣 계산
+    silhouette_avg = silhouette_score(X, labels)
+    # 각 점마다의 실루엣 점수 계싼
+    sample_silhouette_values = silhouette_samples(X, labels)
+
+    # Plot silhouette analysis on the provided axis
+    unique_labels = np.unique(labels) # 클러스터 번호 리스트
+    colormap = cm.tab10 # 색상표 지정
+    color_dict = {label: colormap(float(label) / n_clusters) for label in unique_labels} # 클러스터 번호 마다 색깔 지정
+    y_lower = 10 # y축의 시작점
+    for i in unique_labels:
+        ith_cluster_silhouette_values = sample_silhouette_values[labels == i] # 현재 점들만 실루엣 값 추출
+        ith_cluster_silhouette_values.sort()
+        size_cluster_i = ith_cluster_silhouette_values.shape[0] # 점 개수 구하기
+        y_upper = y_lower + size_cluster_i # 끝점 계산
+        color = color_dict[i]
+        ax.fill_betweenx(np.arange(y_lower, y_upper), # 실루엣 막대 그래프
+                         0, ith_cluster_silhouette_values,
+                         facecolor=color, edgecolor=color, alpha=0.7)
+        ax.text(-0.05, y_lower + 0.5 * size_cluster_i, str(i)) # 클러스터 번호 y축 옆에 표시
+        y_lower = y_upper + 10 # 다음 클러스터는 조금 아래로 띄움
+
+    ax.set_title(f'Silhouette Score for {title_suffix} \n' +
+                 f'Average Silhouette: {silhouette_avg:.2f}')
+    ax.set_xlabel('Silhouette Coefficient')
+    ax.set_ylabel('Cluster')
+    ax.axvline(x=silhouette_avg, color="red", linestyle="--")
+    ax.set_xlim([-0.25, 1])  # Set the x-axis range to [0, 1]
+
+    ax.set_yticks([])
+
+
+X, y = make_blobs(n_samples=500, n_features=2, centers=4, cluster_std=[1.0, 3, 5, 2], random_state=42)
+
+# Number of runs for k-means with different random states
+n_runs = 8
+inertia_values = []
+
+# Calculate number of rows and columns needed for subplots
+n_cols = 2 # Number of columns
+n_rows = -(-n_runs // n_cols) # Ceil division to determine rows
+plt.figure(figsize=(16, 16)) # Adjust the figure size for better visualization
+
+# Run K-Means multiple times with different random states
+for i in range(n_runs):
+    kmeans = KMeans(n_clusters=4, random_state=None)  # Use the default `n_init`
+    kmeans.fit(X)
+    inertia_values.append(kmeans.inertia_)
+
+    # Plot the clustering result
+    plt.subplot(n_rows, n_cols, i + 1)
+    plt.scatter(X[:, 0], X[:, 1], c=kmeans.labels_, cmap='tab10', alpha=0.6, edgecolor='k')
+    plt.scatter(kmeans.cluster_centers_[:, 0], kmeans.cluster_centers_[:, 1], c='red', s=200, marker='x', label='Centroids')
+    plt.title(f'K-Means Run {i + 1}')
+    plt.xlabel('Feature 1')
+    plt.ylabel('Feature 2')
+    plt.legend(loc='upper right', fontsize='small')
+
+plt.tight_layout()
+plt.show()
+
+# Print inertia values
+for i, inertia in enumerate(inertia_values, start=1):
+    print(f'Run {i}: Inertia={inertia:.2f}')
+
