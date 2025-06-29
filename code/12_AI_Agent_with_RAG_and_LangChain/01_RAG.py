@@ -146,7 +146,7 @@ for text in paragraphs[0:5]:
     print(outputs.pooler_output.shape)
 
 # *****모든 개별 임베딩을 합쳐서 하나의 큰 배열로 → shape 확인
-torch.cat(embeddings).detach().numpy().shape
+print(torch.cat(embeddings).detach().numpy().shape)
 
 def encode_contexts(text_list):
     # 입력된 텍스트 리스트를 임베딩 벡터로 변환하는 함수
