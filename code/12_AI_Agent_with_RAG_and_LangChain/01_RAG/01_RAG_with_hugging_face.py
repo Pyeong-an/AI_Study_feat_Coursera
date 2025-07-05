@@ -58,7 +58,7 @@ def tsne_plot(data):
     plt.show()
 
 # 파일 다운로드(1회용)
-filename = 'companyPolicies.txt'
+filename = '../companyPolicies.txt'
 url = 'https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/6JDbUb_L3egv_eOkouY71A.txt'
 
 # Use wget to download the file
@@ -85,7 +85,7 @@ def read_and_split_text(filename):
 
 
 # 텍스트 파일을 읽고 문단 단위로 분리
-paragraphs = read_and_split_text('companyPolicies.txt')
+paragraphs = read_and_split_text('../companyPolicies.txt')
 
 # 처음 10개의 문단 출력
 print(paragraphs[0:10])
